@@ -22,7 +22,6 @@ class TripController extends Controller
         return $request->user()->trips()->create($data);
     }
 
-    // TODO maybe it should be a policy
     public function show(Request $request,Trip $trip) {
         if ($request->user()->can('access',$trip)) {
             return $trip;
