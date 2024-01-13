@@ -41,7 +41,7 @@ class TripController extends Controller
         ]);
 
         $data['driver_location'] = json_decode($data['driver_location'],true);
-
+        $data['driver_id'] = $request->user()->driver->id;
         $trip->update($data);
 
         $trip->load('driver.user');
