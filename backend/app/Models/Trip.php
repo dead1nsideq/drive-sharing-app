@@ -19,6 +19,13 @@ class Trip extends Model
         'driver_id',
     ];
 
+
+    protected $casts = [
+        'origin' => 'array',
+        'destination' => 'array',
+        'driver_location' => 'array',
+    ];
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {
         return $this->belongsTo(User::class);
     }

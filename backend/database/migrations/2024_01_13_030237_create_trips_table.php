@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('destination_name')->nullable();
             $table->json('driver_location')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('driver_id')->references('id')->on('drivers');
+            $table->foreignId('driver_id')->nullable()->references('id')->on('drivers');
             $table->timestamps();
         });
     }
