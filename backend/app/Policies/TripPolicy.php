@@ -15,4 +15,7 @@ class TripPolicy
         return ($trip->user->id === $user->id) || ($trip->driver?->id === $user->driver?->id);
     }
 
+    public function handle(User $user, Trip $trip): bool {
+        return $trip->driver?->id === $user->driver?->id;
+    }
 }

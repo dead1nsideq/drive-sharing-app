@@ -31,14 +31,18 @@ class TripController extends Controller
 
     public function accept(Request $request,Trip $trip) {
         // driver accept the trip
-        $request->validate([
+
+        if ($request->user()->cannot('handle',$trip)) {
+            return response(['message' => 'You cannot accept this trip'],403);
+        }
+
+        $data = $request->validate([
             'driver_location' => 'required'
         ]);
 
-        $trip->update([
-            'driver_id' => $request->user()->id,
-            'driver_location' => $request->only('driver_location')
-        ]);
+        $data['driver_location'] = json_decode($data['driver_location'],true);
+
+        $trip->update($data);
 
         $trip->load('driver.user');
 
@@ -46,6 +50,11 @@ class TripController extends Controller
     }
     public function start(Request $request,Trip $trip) {
         // driver arrived, passenger and driver starts the trip
+
+        if ($request->user()->cannot('handle',$trip)) {
+            return response(['message' => 'You cannot start this trip'],403);
+        }
+
         $trip->update([
             'status' => 'in_progress'
         ]);
@@ -56,6 +65,10 @@ class TripController extends Controller
     }
     public function end(Request $request,Trip $trip) {
         // they have arrived
+        if ($request->user()->cannot('handle',$trip)) {
+            return response(['message' => 'You cannot end this trip'],403);
+        }
+
         $trip->update([
             'status' => 'completed'
         ]);
@@ -65,13 +78,17 @@ class TripController extends Controller
         return $trip;
     }
     public function location(Request $request,Trip $trip) {
-        $request->validate([
+        if ($request->user()->cannot('access',$trip)) {
+            return response(['message' => 'You cannot start this trip'],403);
+        }
+
+        $data = $request->validate([
             'driver_location' => 'required'
         ]);
 
-        $trip->update([
-            'driver_location' => $request->only('driver_location')
-        ]);
+        $data['driver_location'] = json_decode($data['driver_location'],true);
+
+        $trip->update($data);
 
         $trip->load('driver.user');
 
