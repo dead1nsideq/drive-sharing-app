@@ -19,8 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'phone',
     ];
 
     /**
@@ -29,16 +28,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'login_code',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'password' => 'hashed',
-    ];
+    public function driver(): \Illuminate\Database\Eloquent\Relations\HasOne {
+        return $this->hasOne(Driver::class);
+    }
+
+    public function trips(): \Illuminate\Database\Eloquent\Relations\HasMany {
+        return $this->hasMany(Trip::class);
+
+    }
 }
