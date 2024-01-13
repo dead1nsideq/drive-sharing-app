@@ -9,6 +9,10 @@ class Driver extends Model
 {
     use HasFactory;
 
+    protected $table = 'drivers';
+
+    public $timestamps = false;
+
     protected $fillable = [
         'year',
         'make',

@@ -44,16 +44,4 @@ class LoginVerification extends Notification
 
         return (new TwilioSmsMessage())->content("Your login code is $loginCode");
     }
-
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
-        return [
-            //
-        ];
-    }
 }

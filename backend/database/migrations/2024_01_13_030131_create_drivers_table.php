@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('model');
             $table->string('color');
             $table->string('licence_plate');
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+
+            $table->index('user_id');
         });
     }
 
