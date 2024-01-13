@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
+
+            $table->enum('status',['completed','in_progress','not_started'])->default('not_started');
+            $table->json('origin')->nullable();
+            $table->json('destination')->nullable();
+            $table->string('destination_name')->nullable();
+            $table->json('driver_location')->nullable();
+            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('driver_id')->references('id')->on('drivers');
             $table->timestamps();
         });
     }
