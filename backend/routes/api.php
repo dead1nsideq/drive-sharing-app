@@ -11,6 +11,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('/trip',[\App\Http\Controllers\TripController::class, 'store']);
 
+    Route::post('/trip/{trip}',[\App\Http\Controllers\TripController::class, 'show']);
+    Route::post('/trip/{trip}/accept',[\App\Http\Controllers\TripController::class, 'accept']);
+    Route::post('/trip/{trip}/start',[\App\Http\Controllers\TripController::class, 'start']);
+    Route::post('/trip/{trip}/end',[\App\Http\Controllers\TripController::class, 'end']);
+    Route::post('/trip/{trip}/location',[\App\Http\Controllers\TripController::class, 'location']);
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
