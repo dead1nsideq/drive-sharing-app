@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('year');
+            $table->string('make');
+            $table->string('model');
+            $table->string('color');
+            $table->string('licence_plate');
+            $table->foreignId('user_id')->references('id')->on('users');
         });
     }
 
