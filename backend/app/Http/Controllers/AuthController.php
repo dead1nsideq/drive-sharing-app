@@ -14,7 +14,8 @@ class AuthController extends Controller
         // validate (request) the phone number
 
         $request->validate([
-            'phone' => 'required|numeric|min:10|max:255|unique'.User::class
+            //|unique:'.User::class
+            'phone' => 'required|numeric|min:10'
         ]);
 
         // find or create a user model
@@ -32,5 +33,28 @@ class AuthController extends Controller
         // return response
 
         return response()->json(['message' => 'Text message notification sent']);
+    }
+
+    public function verify(Request $request) {
+        //validate the verification code
+        $request->validate([
+            //|unique:'.User::class
+            'phone' => 'required|numeric|min:10',
+            'login_code' => 'required|integer|between:111111,999999'
+        ]);
+        //find user
+        $user = User::where('phone',$request->phone)->where('login_code',$request->login_code)->first();
+        //verify the user code with one sent
+        //return response if code is right return auth token if is massage of it's invalid
+        if ($user) {
+            $user->update([
+                'login_code' => null
+            ]);
+
+            return $user->createToken($request->login_code)->plainTextToken;
+        }
+
+        return response()->json(['message' => 'Invalid verification code.'],401);
+
     }
 }

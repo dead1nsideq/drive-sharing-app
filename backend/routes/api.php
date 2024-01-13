@@ -9,3 +9,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login',[\App\Http\Controllers\AuthController::class, 'submit']);
+Route::post('/login/verify',[\App\Http\Controllers\AuthController::class, 'verify']);
