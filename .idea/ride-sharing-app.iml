@@ -8,15 +8,22 @@
       <sourceFolder url="file://$MODULE_DIR$/backend/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/backend/tests/Feature" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/backend/tests/Unit" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/beyondcode/laravel-websockets" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/carbonphp/carbon-doctrine-types" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/cboden/ratchet" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/dflydev/dot-access-data" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/inflector" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/lexer" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/dragonmantank/cron-expression" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/egulias/email-validator" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/facade/ignition-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/fakerphp/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/fig/http-message-util" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/filp/whoops" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/fruitcake/php-cors" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/graham-campbell/result-type" />
@@ -25,6 +32,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/guzzlehttp/uri-template" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/hamcrest/hamcrest-php" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/laravel-notification-channels/twilio" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/laravel/framework" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/laravel/pint" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/laravel/prompts" />
@@ -46,6 +54,8 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/nunomaduro/collision" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/nunomaduro/termwind" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/paragonie/sodium_compat" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/phpoption/phpoption" />
@@ -64,9 +74,19 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/psr/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/psy/psysh" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/pusher/pusher-php-server" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/ramsey/collection" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/ramsey/uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/ratchet/rfc6455" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/dns" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/http" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/react/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/ringcentral/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/sebastian/cli-parser" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/sebastian/code-unit" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/sebastian/code-unit-reverse-lookup" />
@@ -107,6 +127,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/polyfill-uuid" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/psr-http-message-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/routing" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/string" />
@@ -117,6 +138,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/tijsverkoyen/css-to-inline-styles" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/twilio/sdk" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/webmozart/assert" />

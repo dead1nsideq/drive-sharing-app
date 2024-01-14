@@ -29,7 +29,15 @@ class AuthController extends Controller
             ],401);
         }
         // send a user temporary code
-        $user->notify(new LoginVerification());
+        // TODO remove this comment
+//        $user->notify(new LoginVerification());
+        // this is just to save me some notifications)))
+        $loginCode = rand(111111,999999);
+
+        $user->update([
+            'login_code' => $loginCode
+        ]);
+
         // return response
 
         return response()->json(['message' => 'Text message notification sent']);

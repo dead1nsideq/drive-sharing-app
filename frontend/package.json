@@ -16,6 +16,8 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
     "autoprefixer": "^10.4.16",
+    "axios": "^1.6.5",
+    "maska": "^2.1.11",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1",
     "vite": "^5.0.10"
