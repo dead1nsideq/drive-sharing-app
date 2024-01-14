@@ -2,8 +2,8 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Login from "@/views/Login.vue";
 import NotFound from "@/views/NotFound.vue";
 import Home from "@/views/Home.vue";
-import axios from "axios";
 import {useAuthStore} from "@/stores/auth.js";
+import Location from "@/views/Location.vue";
 
 
 const router = createRouter({
@@ -20,6 +20,12 @@ const router = createRouter({
             name: 'home',
             meta: {requiresAuth: true},
             component: Home
+        },
+        {
+            path: '/location',
+            name: 'location',
+            meta: {requiresAuth: true},
+            component: Location
         },
         {
             path: '/:pathMatch(.*)',
