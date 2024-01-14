@@ -1,45 +1,47 @@
 <script setup>
 import {vMaska} from "maska";
-import {reactive, ref} from "vue";
-import axios from "axios";
+import {computed, reactive, ref} from "vue";
+import {useAuthStore} from "@/stores/auth.js";
 
 const credentials = reactive({
-  phone: null,
+  phone: '',
   login_code: null,
 });
 
+const formattedCredentials = computed(() => {
+  return {
+    phone: credentials.phone.replace(/\D/g, ''),
+    login_code: credentials.login_code
+  }
+})
+
 const waitingOnVerification = ref(false);
 
-function handleLogin() {
-  axios.post('http://localhost:8000/api/login', {
+const authStore = useAuthStore();
+function login() {
+  authStore.handleLogin({
     phone: credentials.phone.replace(/\D/g, '')
-  }).then((response) => {
-    console.log(response.data)
-  }).catch((error) => {
-    console.error(error)
-    alert(error.response.data.message)
   })
+  waitingOnVerification.value = true;
 }
 
-function handleVerification() {
-  axios.post('http://localhost:8000/api/login/verify',
-      {
-        phone: credentials.phone.replace(/\D/g, ''),
-        login_code: credentials.login_code
-      }).then((response) => {
-    console.log(response.data)
-  }).catch((error) => {
-    console.error(error)
-    alert(error.response.data.message)
-  })
+function verification() {
+  authStore.handleVerification({
+    phone: credentials.phone.replace(/\D/g, ''),
+    login_code: credentials.login_code
+  });
+  credentials.login_code = null;
+  credentials.phone = '';
+  waitingOnVerification.value = false;
 }
+
 </script>
 
 <template>
   <div class="pt-16">
     <div v-if="!waitingOnVerification">
       <h1 class="text-3xl font-semibold mb-4">Enter your phone number</h1>
-      <form action="#" @submit.prevent="handleLogin()" @submit="waitingOnVerification = true">
+      <form action="#" @submit.prevent="login()">
         <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
           <div class="bg-white px-4 py-5 sm:p-6">
             <div>
@@ -59,7 +61,7 @@ function handleVerification() {
     </div>
     <div v-else>
       <h1 class="text-3xl font-semibold mb-4">Enter your verification code</h1>
-      <form action="#" @submit.prevent="handleVerification()">
+      <form action="#" @submit.prevent="verification()">
         <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
           <div class="bg-white px-4 py-5 sm:p-6">
             <div>
