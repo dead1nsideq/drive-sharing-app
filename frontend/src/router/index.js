@@ -5,6 +5,7 @@ import Home from "@/views/Home.vue";
 import Map from "@/views/Map.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import Location from "@/views/Location.vue";
+import {useLocationStore} from "@/stores/location.js";
 
 
 const router = createRouter({
@@ -35,6 +36,12 @@ const router = createRouter({
             component: Map
         },
         {
+            path: '/trip',
+            name: 'trip',
+            meta: {requiresAuth: true},
+            component: Trip
+        },
+        {
             path: '/:pathMatch(.*)',
             name: 'not-found',
             component: NotFound
@@ -42,15 +49,17 @@ const router = createRouter({
     ]
 })
 
-router.beforeEach( async (to, from,next) => {
+router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
-
+    const locationStore = useLocationStore();
     await authStore.initialAuthStatusCheck();
 
     if (to.meta.requiresGuest && authStore.state.logged) {
         next({name: 'home'});
     } else if (to.meta.requiresAuth && !authStore.state.logged) {
         next({name: 'login'});
+    } else if (to.name === 'map' && locationStore.destination.name === '') {
+        next({name: 'location'});
     } else {
         next();
     }
