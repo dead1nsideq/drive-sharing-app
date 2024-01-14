@@ -7,6 +7,8 @@ import {useAuthStore} from "@/stores/auth.js";
 import Location from "@/views/Location.vue";
 import {useLocationStore} from "@/stores/location.js";
 import Trip from "@/views/Trip.vue";
+import Driver from "@/views/Driver.vue";
+import Standby from "@/views/Standby.vue";
 
 
 const router = createRouter({
@@ -41,6 +43,18 @@ const router = createRouter({
             name: 'trip',
             meta: {requiresAuth: true},
             component: Trip
+        },
+        {
+            path: '/driver',
+            name: 'driver',
+            meta: {requiresAuth: true},
+            component: Driver
+        },
+        {
+            path: '/standby',
+            name: 'standby',
+            meta: {requiresAuth: true},
+            component: Standby
         },
         {
             path: '/:pathMatch(.*)',

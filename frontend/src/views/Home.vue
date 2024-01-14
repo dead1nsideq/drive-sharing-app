@@ -2,7 +2,21 @@
 import router from "@/router/index.js";
 
 function handleStartDriving() {
-  console.log('remove it')
+    axios.get('driver').then(
+        (response) => {
+          if (response.data.driver) {
+            router.push(
+                {name: 'standby'}
+            )
+          } else {
+            router.push(
+                {name: 'driver'}
+            )
+          }
+        }
+    ).catch((error) => {
+      console.error(error)
+    })
 }
 function handleFindARide() {
   router.push(
