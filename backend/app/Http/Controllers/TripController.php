@@ -19,8 +19,8 @@ class TripController extends Controller
             'destination_name' => 'required',
         ]);
 
-        $data['origin'] = json_decode($data['origin'],true);
-        $data['destination'] = json_decode($data['destination'],true);
+//        $data['origin'] = json_decode($data['origin'],true);
+//        $data['destination'] = json_decode($data['destination'],true);
 
         return $request->user()->trips()->create($data);
     }
@@ -43,7 +43,7 @@ class TripController extends Controller
             'driver_location' => 'required'
         ]);
 
-        $data['driver_location'] = json_decode($data['driver_location'],true);
+//        $data['driver_location'] = json_decode($data['driver_location'],true);
         $data['driver_id'] = $request->user()->driver->id;
         $trip->update($data);
 
@@ -93,7 +93,7 @@ class TripController extends Controller
             'driver_location' => 'required'
         ]);
 
-        $data['driver_location'] = json_decode($data['driver_location'],true);
+//        $data['driver_location'] = json_decode($data['driver_location'],true);
 
         $trip->update($data);
 

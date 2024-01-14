@@ -6,6 +6,7 @@ import Map from "@/views/Map.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import Location from "@/views/Location.vue";
 import {useLocationStore} from "@/stores/location.js";
+import Trip from "@/views/Trip.vue";
 
 
 const router = createRouter({
