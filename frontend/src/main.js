@@ -2,7 +2,7 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import VueGoogleMaps from '@fawmi/vue-google-maps'
+import VueGoogleMaps from 'vue-google-maps-community-fork'
 
 import App from './App.vue'
 import router from './router'
@@ -27,12 +27,13 @@ axios.interceptors.request.use(
 );
 
 const app = createApp(App)
-
+// AIzaSyDQxV0TU2-f-976Ovp2-_C1Qxh2Z00lrd4
 app.use(createPinia())
 app.use(router)
 app.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyDQxV0TU2-f-976Ovp2-_C1Qxh2Z00lrd4',
+        libraries: 'places'
     },
 })
 app.mount('#app')
