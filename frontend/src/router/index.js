@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import Login from "@/views/Login.vue";
 import NotFound from "@/views/NotFound.vue";
 import Home from "@/views/Home.vue";
+import Map from "@/views/Map.vue";
 import {useAuthStore} from "@/stores/auth.js";
 import Location from "@/views/Location.vue";
 
@@ -26,6 +27,12 @@ const router = createRouter({
             name: 'location',
             meta: {requiresAuth: true},
             component: Location
+        },
+        {
+            path: '/map',
+            name: 'map',
+            meta: {requiresAuth: true},
+            component: Map
         },
         {
             path: '/:pathMatch(.*)',
