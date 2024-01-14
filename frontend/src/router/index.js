@@ -3,6 +3,7 @@ import Login from "@/views/Login.vue";
 import NotFound from "@/views/NotFound.vue";
 import Home from "@/views/Home.vue";
 import axios from "axios";
+import {useAuthStore} from "@/stores/auth.js";
 
 
 const router = createRouter({
@@ -28,51 +29,18 @@ const router = createRouter({
     ]
 })
 
-router.beforeEach((to, from) => {
-    // axios.get('/user').then(
-    //     () => {
-    //         console.log('FROM AUTH STORE CAN BE LOGGED')
-    //         if (to.meta.requiresGuest) {
-    //             next({name: 'home'});
-    //         } else {
-    //             console.log('else')
-    //             next();
-    //         }
-    //     }).catch(() => {
-    //     localStorage.removeItem('token')
-    //     console.error('FROM AUTH STORE CANNOT BE LOGGED');
-    //     if (to.meta.requiresAuth) {
-    //         next({name: 'login'});
-    //     } else {
-    //         console.log('else')
-    //         next();
-    //     }
-    // })
+router.beforeEach( async (to, from,next) => {
+    const authStore = useAuthStore();
 
-    if (to.name === 'login') {
-        return true
+    await authStore.initialAuthStatusCheck();
+
+    if (to.meta.requiresGuest && authStore.state.logged) {
+        next({name: 'home'});
+    } else if (to.meta.requiresAuth && !authStore.state.logged) {
+        next({name: 'login'});
+    } else {
+        next();
     }
-
-    if (!localStorage.getItem('token')) {
-        return {
-            name: 'login'
-        }
-    }
-
-    checkTokenAuthenticity()
 })
-
-const checkTokenAuthenticity = () => {
-    axios.get('/user').then((response) => {
-    })
-        .catch((error) => {
-            localStorage.removeItem('token')
-            router.push({
-                name: 'login'
-            })
-        })
-
-}
-
 
 export default router

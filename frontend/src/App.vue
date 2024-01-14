@@ -5,6 +5,6 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <div class="min-h-screen bg-gray-100 text-center antialiased">
-      <RouterView />
+    <router-view></router-view>
   </div>
 </template>

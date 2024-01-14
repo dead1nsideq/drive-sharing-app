@@ -1,45 +1,53 @@
 <script setup>
 import {vMaska} from "maska";
-import {computed, reactive, ref} from "vue";
+import {reactive} from "vue";
 import {useAuthStore} from "@/stores/auth.js";
+import router from "@/router/index.js";
+import axios from "axios";
 
 const credentials = reactive({
   phone: '',
   login_code: null,
 });
 
-const formattedCredentials = computed(() => {
-  return {
-    phone: credentials.phone.replace(/\D/g, ''),
-    login_code: credentials.login_code
-  }
-})
-
-const waitingOnVerification = ref(false);
-
 const authStore = useAuthStore();
+
+useAuthStore();
 function login() {
-  authStore.handleLogin({
-    phone: credentials.phone.replace(/\D/g, '')
-  })
-  waitingOnVerification.value = true;
+  authStore.handleLogin({ phone: credentials.phone.replace(/\D/g, '') })
 }
 
 function verification() {
-  authStore.handleVerification({
+  // authStore.handleVerification({
+  //   phone: credentials.phone.replace(/\D/g, ''),
+  //   login_code: credentials.login_code
+  // })
+  // credentials.login_code = null;
+  // credentials.phone = '';
+  // authStore.state.waitingOnVerification = false;
+  axios.post('/login/verify',{
     phone: credentials.phone.replace(/\D/g, ''),
     login_code: credentials.login_code
-  });
-  credentials.login_code = null;
-  credentials.phone = '';
-  waitingOnVerification.value = false;
+  }).then((response) => {
+    localStorage.setItem('token',response.data);
+    authStore.state.logged = true;
+    credentials.login_code = null;
+    credentials.phone = '';
+    authStore.state.waitingOnVerification = false;
+    router.push({
+      name: 'home'
+    })
+  }).catch((error) => {
+    console.error(error)
+    alert(error.response.data.message)
+  })
 }
 
 </script>
 
 <template>
   <div class="pt-16">
-    <div v-if="!waitingOnVerification">
+    <div v-if="!authStore.state.waitingOnVerification">
       <h1 class="text-3xl font-semibold mb-4">Enter your phone number</h1>
       <form action="#" @submit.prevent="login()">
         <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
