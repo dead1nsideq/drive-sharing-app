@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\TestEvent;
 use App\Events\TripAccepted;
+use App\Events\TripCreated;
 use App\Events\TripEnded;
 use App\Events\TripLocationUpdated;
 use App\Events\TripStarted;
@@ -22,7 +24,11 @@ class TripController extends Controller
 //        $data['origin'] = json_decode($data['origin'],true);
 //        $data['destination'] = json_decode($data['destination'],true);
 
-        return $request->user()->trips()->create($data);
+        $trip = $request->user()->trips()->create($data);
+
+        TripCreated::dispatch($trip,$request->user());
+
+        return $trip;
     }
 
     public function show(Request $request,Trip $trip) {

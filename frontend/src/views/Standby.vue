@@ -2,23 +2,13 @@
 import {useLocationStore} from "@/stores/location.js";
 import Loader from "@/components/Loader.vue";
 import {onMounted} from "vue";
-import Echo from "laravel-echo";
 
 const locationStore = useLocationStore();
 
 onMounted(() => {
-  let echo = new Echo({
-      broadcaster: 'pusher',
-      key: 'mykey',
-      cluster: 'mt1',
-      wsHost: window.location.hostname,
-      wsPort: 6001,
-      forceTLS: false,
-      disableStats: true,
-      enableTransports: ['ws','wss']
+  window.Echo.channel('drivers').listen('TripCreated', (e) => {
+      console.log(e)
   })
-
-  echo.channel()
 })
 
 const handleConfirmDrive = () => {

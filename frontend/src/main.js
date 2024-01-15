@@ -8,7 +8,9 @@ import App from './App.vue'
 import router from './router'
 
 import axios from "axios";
+import Echo from "laravel-echo";
 
+import Pusher from 'pusher-js';
 
 window.axios = axios
 window.axios.defaults.baseURL= "http://localhost:8000/api";
@@ -25,6 +27,18 @@ axios.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+window.Pusher = Pusher;
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'mykey',
+    cluster: 'mt1',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss']
+})
 
 const app = createApp(App)
 // AIzaSyDQxV0TU2-f-976Ovp2-_C1Qxh2Z00lrd4
