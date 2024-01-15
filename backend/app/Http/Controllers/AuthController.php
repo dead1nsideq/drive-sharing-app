@@ -58,8 +58,11 @@ class AuthController extends Controller
             $user->update([
                 'login_code' => null
             ]);
-
-            return $user->createToken($request->login_code)->plainTextToken;
+            $token = $user->createToken($request->login_code)->plainTextToken;
+            return response()->json([
+                'token' => $token,
+                'user_id' => $user->id
+            ]);
         }
 
         return response()->json(['message' => 'Invalid verification code.'],401);

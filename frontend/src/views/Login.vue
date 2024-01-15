@@ -29,8 +29,9 @@ function verification() {
     phone: credentials.phone.replace(/\D/g, ''),
     login_code: credentials.login_code
   }).then((response) => {
-    localStorage.setItem('token',response.data);
+    localStorage.setItem('token',response.data.token);
     authStore.state.logged = true;
+    authStore.state.user_id = response.data.user_id;
     credentials.login_code = null;
     credentials.phone = '';
     authStore.state.waitingOnVerification = false;

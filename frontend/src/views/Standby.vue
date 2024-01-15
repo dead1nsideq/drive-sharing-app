@@ -15,11 +15,12 @@ onMounted(async () => {
   await locationStore.updateCurrentLocation();
 
   window.Echo.channel('drivers').listen('TripCreated', (e) => {
-    tripStore.id = e.trip.id
-    tripStore.user_id = e.trip.user_id
-    tripStore.origin = e.trip.origin
-    tripStore.destination = e.trip.destination
-    tripStore.destination_name = e.trip.destination_name
+    // tripStore.id = e.trip.id
+    // tripStore.user_id = e.trip.user_id
+    // tripStore.origin = e.trip.origin
+    // tripStore.destination = e.trip.destination
+    // tripStore.destination_name = e.trip.destination_name
+    tripStore.$patch(e.trip)
     console.log(e.trip)
 
     setTimeout(initMapDirections, 2000)

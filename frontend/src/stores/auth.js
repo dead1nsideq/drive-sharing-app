@@ -4,6 +4,7 @@ import axios from "axios";
 
 export const useAuthStore = defineStore('auth', () => {
     const state = reactive({
+        user_id: null,
         logged: false,
         waitingOnVerification: false,
     })
@@ -20,7 +21,8 @@ export const useAuthStore = defineStore('auth', () => {
 
      function handleVerification(credentials) {
         axios.post('/login/verify',credentials).then((response) => {
-            localStorage.setItem('token',response.data);
+            localStorage.setItem('token',response.data.token);
+            state.user_id = response.data.user_id
             state.logged = true;
         }).catch((error) => {
             console.error(error)
@@ -33,6 +35,8 @@ export const useAuthStore = defineStore('auth', () => {
             try {
                 const res = await axios.get('/user')
                 state.logged = res.status === 200;
+                console.log(state.user_id)
+                state.user_id = res.data.user_id
             } catch (error) {
                 state.logged = false;
             }
