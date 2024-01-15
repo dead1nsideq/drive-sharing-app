@@ -1,7 +1,25 @@
 <script setup>
 import {useLocationStore} from "@/stores/location.js";
+import Loader from "@/components/Loader.vue";
+import {onMounted} from "vue";
+import Echo from "laravel-echo";
 
 const locationStore = useLocationStore();
+
+onMounted(() => {
+  let echo = new Echo({
+      broadcaster: 'pusher',
+      key: 'mykey',
+      cluster: 'mt1',
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      forceTLS: false,
+      disableStats: true,
+      enableTransports: ['ws','wss']
+  })
+
+  echo.channel()
+})
 
 const handleConfirmDrive = () => {
 
@@ -16,31 +34,39 @@ const handleDeclineDrive = () => {
 
 <template>
   <div class="pt-16">
-    <h1 class="text-3xl font-semibold mb-4">Customer want to drive!</h1>
-    <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
-      <div class="bg-white px-4 py-5 sm:p-6">
-        <div>
-          <GMapMap :zoom="11" :center="locationStore.destination.geometry"
-                   style="width: 100%; height: 256px;"
-                   ref="gMap">
-            <GMapMarker :position="locationStore.destination.geometry"></GMapMarker>
-          </GMapMap>
-        </div>
-        <div class="mt-2 text-right px-3">
-          <p class="text-xl">Drive to <strong>{{ locationStore.destination.name }}</strong></p>
-        </div>
+    <div v-if="true">
+      <h1 class="text-3xl font-semibold mb-4">Waiting for ride request...</h1>
+      <div class="mt-8 flex justify-center">
+          <Loader></Loader>
       </div>
-      <div class="flex justify-between bg-gray-50 px-4 py-3 text-right sm:px-6">
-        <button
-            @click.prevent="handleConfirmDrive"
-            class="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none">
-          Let's go!
-        </button>
-        <button
-            @click.prevent="handleDeclineDrive"
-            class="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none">
-          Let's go!
-        </button>
+    </div>
+    <div v-else>
+      <h1 class="text-3xl font-semibold mb-4">Customer want to drive!</h1>
+      <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
+        <div class="bg-white px-4 py-5 sm:p-6">
+          <div>
+            <GMapMap :zoom="11" :center="locationStore.destination.geometry"
+                     style="width: 100%; height: 256px;"
+                     ref="gMap">
+              <GMapMarker :position="locationStore.destination.geometry"></GMapMarker>
+            </GMapMap>
+          </div>
+          <div class="mt-2 text-right px-3">
+            <p class="text-xl">Drive to <strong>{{ locationStore.destination.name }}</strong></p>
+          </div>
+        </div>
+        <div class="flex justify-between bg-gray-50 px-4 py-3 text-right sm:px-6">
+          <button
+              @click.prevent="handleConfirmDrive"
+              class="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none">
+            Let's go!
+          </button>
+          <button
+              @click.prevent="handleDeclineDrive"
+              class="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none">
+            Let's go!
+          </button>
+        </div>
       </div>
     </div>
   </div>

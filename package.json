@@ -1,6 +1,8 @@
 {
   "devDependencies": {
-    "@fawmi/vue-google-maps": "^0.9.79"
+    "@fawmi/vue-google-maps": "^0.9.79",
+    "laravel-echo": "^1.15.3",
+    "pusher-js": "^8.4.0-rc2"
   },
   "dependencies": {
     "vue-google-maps-community-fork": "^0.3.1"
