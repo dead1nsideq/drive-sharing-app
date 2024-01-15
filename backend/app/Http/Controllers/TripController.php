@@ -41,9 +41,9 @@ class TripController extends Controller
     public function accept(Request $request,Trip $trip) {
         // driver accept the trip
 
-        if ($request->user()->cannot('handle',$trip)) {
-            return response(['message' => 'You cannot accept this trip'],403);
-        }
+//        if ($request->user()->cannot('handle',$trip)) {
+//            return response(['message' => 'You cannot accept this trip'],403);
+//        }
 
         $data = $request->validate([
             'driver_location' => 'required'
@@ -51,6 +51,9 @@ class TripController extends Controller
 
 //        $data['driver_location'] = json_decode($data['driver_location'],true);
         $data['driver_id'] = $request->user()->driver->id;
+        $trip->update([
+            'status' => 'in_progress'
+        ]);
         $trip->update($data);
 
         $trip->load('driver.user');
