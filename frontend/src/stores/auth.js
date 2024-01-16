@@ -5,12 +5,11 @@ import axios from "axios";
 export const useAuthStore = defineStore('auth', () => {
     const state = reactive({
         user_id: null,
-        logged: false,
         waitingOnVerification: false,
     })
 
-    function handleLogin(phone) {
-        axios.post('/login', phone)
+    function handleLogin(credentials) {
+        axios.post('/login', credentials)
             .then((response) => {
              state.waitingOnVerification = true})
             .catch((error) => {
@@ -22,8 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
      function handleVerification(credentials) {
         axios.post('/login/verify',credentials).then((response) => {
             localStorage.setItem('token',response.data.token);
-            state.user_id = response.data.user_id
-            state.logged = true;
+            state.user_id = response.data.id
         }).catch((error) => {
             console.error(error)
             alert(error.response.data.message)
@@ -31,14 +29,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     async function initialAuthStatusCheck() {
-        if (!state.logged) {
+        if (!state.user_id) {
             try {
                 const res = await axios.get('/user')
-                state.logged = res.status === 200;
+                state.user_id = res.data.id
                 console.log(state.user_id)
-                state.user_id = res.data.user_id
             } catch (error) {
-                state.logged = false;
+                state.user_id = null;
             }
         }
     }

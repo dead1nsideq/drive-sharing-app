@@ -5,7 +5,6 @@ import router from "@/router/index.js";
 import Error from "@/components/Error.vue";
 
 const driver = reactive({
-    name: '',
     year: null,
     make: '',
     model: '',
@@ -14,7 +13,6 @@ const driver = reactive({
 })
 
 const errors = reactive({
-  name: '',
   year: null,
   make: '',
   model: '',
@@ -27,12 +25,13 @@ onMounted(() => {
 })
 const getInfoAboutDriver = () => {
     axios.get('/driver').then((response) => {
-        driver.name = response.data.name
+      if (response.driver) {
         driver.year = response.data.driver.year
         driver.make = response.data.driver.make
         driver.model = response.data.driver.model
         driver.color = response.data.driver.color
         driver.licence_plate = response.data.driver.licence_plate
+        }
     })
 }
 
@@ -45,7 +44,7 @@ const handleSaveDriver = () => {
         }
     ).catch(
         (error) => {
-          errors.name = error.response.data.errors.name[0]
+          console.log('driver catch error')
           errors.year = error.response.data.errors.year[0]
           errors.make = error.response.data.errors.make[0]
           errors.model = error.response.data.errors.model[0]
@@ -62,11 +61,6 @@ const handleSaveDriver = () => {
     <form action="#" @submit.prevent="handleSaveDriver">
       <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
         <div class="bg-white px-4 py-5 sm:p-6">
-          <div>
-            <Error class="mt-2" :message="errors.name"></Error>
-            <input type="text" name="name" id="name" v-model="driver.name" placeholder="Full Name"
-                   class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-black focus:outline-none">
-          </div>
           <div class="mt-2">
             <Error class="mt-2" :message="errors.year"></Error>
             <input type="number" name="year" id="year" v-model="driver.year" placeholder="Car Year"

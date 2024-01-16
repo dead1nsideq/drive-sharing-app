@@ -28,7 +28,7 @@ const destinationIcon = {
 
 const updateMapBounds = (mapObject) => {
   let originPoint = new google.maps.LatLng(locationStore.current.geometry),
-      destinationPoint = new google.maps.LatLng(locationStore.destination.geometry),
+      destinationPoint = new google.maps.LatLng(tripStore.destination),
       latLngBounds = new google.maps.LatLngBounds()
 
   latLngBounds.extend(originPoint)
@@ -79,10 +79,10 @@ const gMap = ref(null)
       <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
         <div class="bg-white px-4 py-5 sm:p-6">
           <div>
-            <GMapMap :zoom="14" :center="locationStore.current.geometry" ref="gMap"
+            <GMapMap :zoom="14" :center="{ lat: +locationStore.current.geometry.lat, lng: +locationStore.current.geometry.lng}" ref="gMap"
                      style="width:100%; height: 256px;">
-              <GMapMarker :position="locationStore.current.geometry" :icon="currentIcon" />
-              <GMapMarker :position="locationStore.destination.geometry" :icon="destinationIcon" />
+              <GMapMarker :position="{ lat: +locationStore.current.geometry.lat, lng: +locationStore.current.geometry.lng}" :icon="currentIcon" />
+              <GMapMarker :position="{ lat: +tripStore.destination.lat, lng: +tripStore.destination.lng}" :icon="destinationIcon" />
             </GMapMap>
           </div>
         <div class="mt-2">

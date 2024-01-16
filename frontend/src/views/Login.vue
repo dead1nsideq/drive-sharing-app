@@ -8,13 +8,14 @@ import axios from "axios";
 const credentials = reactive({
   phone: '',
   login_code: null,
+  name: '',
 });
 
 const authStore = useAuthStore();
 
 useAuthStore();
 function login() {
-  authStore.handleLogin({ phone: credentials.phone.replace(/\D/g, '') })
+  authStore.handleLogin({ phone: credentials.phone.replace(/\D/g, ''), name: credentials.name })
 }
 
 function verification() {
@@ -30,10 +31,10 @@ function verification() {
     login_code: credentials.login_code
   }).then((response) => {
     localStorage.setItem('token',response.data.token);
-    authStore.state.logged = true;
-    authStore.state.user_id = response.data.user_id;
+    authStore.state.user_id = response.data.id;
     credentials.login_code = null;
     credentials.phone = '';
+    credentials.name = '';
     authStore.state.waitingOnVerification = false;
     router.push({
       name: 'home'
@@ -56,6 +57,11 @@ function verification() {
             <div>
               <input v-model="credentials.phone" type="text" v-maska data-maska="+(###) ## ####-###" name="phone"
                      id="phone" placeholder="+1 (234) 56 7789-10"
+                     class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-black focus:outline-none">
+            </div>
+            <div class="mt-4">
+              <input v-model="credentials.name" type="text" name="name"
+                     id="name" placeholder="Your name"
                      class="mt-1 block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:border-black focus:outline-none">
             </div>
           </div>

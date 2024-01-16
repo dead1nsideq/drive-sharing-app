@@ -10,6 +10,7 @@ import Trip from "@/views/Trip.vue";
 import Driver from "@/views/Driver.vue";
 import Standby from "@/views/Standby.vue";
 import Driving from "@/views/Driving.vue";
+import {useTripStore} from "@/stores/trip.js";
 
 
 const router = createRouter({
@@ -74,15 +75,37 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
     const locationStore = useLocationStore();
+    const tripStore = useTripStore();
     await authStore.initialAuthStatusCheck();
+    await tripStore.initTripCheck();
+    await locationStore.updateCurrentLocation()
 
-    if (to.meta.requiresGuest && authStore.state.logged) {
+
+    if (to.meta.requiresGuest && authStore.state.user_id) {
         next({name: 'home'});
-    } else if (to.meta.requiresAuth && !authStore.state.logged) {
+    } else if (to.meta.requiresAuth && !authStore.state.user_id) {
         next({name: 'login'});
-    } else if (to.name === 'map' && locationStore.destination.name === '') {
-        next({name: 'location'});
+    } else if ((to.name === 'trip') && tripStore.id === null) {
+        console.log('i am here')
+        next({name: 'location'})
+    } else if ((to.name === 'map') && locationStore.destination.name === '') {
+        console.log('fffffffffffuck')
+        next({name: 'location'})
+    } else if (tripStore.driver_id === authStore.user_id && to.name === 'driving') {
+        console.log('i drive againg')
+        next();
+    } else if (tripStore.id !== null) {
+        console.log('kakarot')
+        if (tripStore.user_id === authStore.user_id) {
+            console.log('i am a passanger')
+            next({name: 'trip'})
+        } else {
+            console.log('i drive')
+            next({name: 'driving'})
+        }
     } else {
+        console.log(tripStore.id)
+        console.log('next just')
         next();
     }
 })

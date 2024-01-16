@@ -1,9 +1,9 @@
 <script setup>
 import {useLocationStore} from "@/stores/location.js";
 import {useTripStore} from "@/stores/trip.js";
-import {onMounted, ref} from "vue";
-import axios from "axios";
+import {onBeforeMount, onMounted, ref} from "vue";
 import {useAuthStore} from "@/stores/auth.js";
+import router from "@/router/index.js";
 
 const locationStore = useLocationStore();
 const tripStore = useTripStore();
@@ -20,6 +20,11 @@ const currentIcon = {
   }
 }
 
+onBeforeMount(() => {
+
+  console.log('Mog')
+})
+
 onMounted(() => {
 
 
@@ -27,9 +32,20 @@ onMounted(() => {
       console.log('from broadcast', e)
       tripStore.$patch(e.trip)
       title.value = 'A driver is on the way'
-      message.value = `${e.trip.driver.user.name} is coming in a ${e.trip.driver.year} ${e.trip.driver.color} ${e.trip.driver.make} ${e.trip.driver.model} with a license plate #${e.trip.driver.license_plate}`
+      message.value = `${e.trip.driver.user.name} is coming in a ${e.trip.driver.year} ${e.trip.driver.color} ${e.trip.driver.make} ${e.trip.driver.model} with a license plate #${e.trip.driver.licence_plate}`
   })
 })
+
+function handleCancelTrip() {
+    axios.delete(`/trip/${tripStore.id}/cancel`).then((res) => {
+          console.log(res.data)
+          tripStore.resetState()
+          router.push({
+            name: 'home'
+          })
+        }
+    ).catch((err) => console.error(err))
+}
 
 </script>
 
@@ -40,14 +56,17 @@ onMounted(() => {
       <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
           <div class="bg-white px-4 py-5 sm:p-6">
              <div>
-               <GMapMap :center="locationStore.destination.geometry" :zoom="14"
+               <GMapMap :center="{lat: +tripStore.destination.lat, lng: +tripStore.destination.lng}" :zoom="14"
                         ref="gMap" style="width: 100%; height: 256px;">
                  <GMapMarker :position="locationStore.current.geometry" :icon="currentIcon" />
                </GMapMap>
              </div>
           </div>
           <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-            <span> {{ message }} </span>
+            <div class="flex justify-between">
+              <span> {{ message }} </span>
+              <button class="bg-gray-600" type="submit" @click="handleCancelTrip">Delete trip</button>
+            </div>
           </div>
       </div>
     </div>

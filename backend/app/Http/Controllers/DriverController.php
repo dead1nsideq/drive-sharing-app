@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use Illuminate\Http\Request;
 
 class DriverController extends Controller {
@@ -16,6 +17,10 @@ class DriverController extends Controller {
         return $user;
     }
 
+    public function trips() {
+        return Trip::where('driver_id',null)->get();
+    }
+
     public function update(Request $request) {
         $request->validate([
             'year' => 'required|integer|between:1960,2024',
@@ -23,12 +28,9 @@ class DriverController extends Controller {
             'model' => 'required|string',
             'color' => 'required|alpha',
             'licence_plate' => 'required|string',
-            'name' => 'required|string'
         ]);
 
         $user = $request->user();
-
-        $user->update($request->only('name'));
 
         $user->driver()->updateOrCreate(
             ['user_id' => $user->id],

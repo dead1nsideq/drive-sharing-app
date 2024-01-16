@@ -23,13 +23,13 @@ const handleConfirmTrip = () => {
 }
 
 onMounted(async () => {
-  if (locationStore.destination.name === ''
-      && locationStore.destination.geometry.lat === null
-      && locationStore.destination.geometry.lng === null) {
-    router.push({
-      name: 'location'
-    })
-  }
+  // if (locationStore.destination.name === ''
+  //     && locationStore.destination.geometry.lat === null
+  //     && locationStore.destination.geometry.lng === null) {
+  //   router.push({
+  //     name: 'location'
+  //   })
+  // }
 
   await locationStore.updateCurrentLocation()
   // navigator.geolocation.getCurrentPosition((success) => {

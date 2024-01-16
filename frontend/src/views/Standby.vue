@@ -5,14 +5,23 @@ import {onMounted, ref} from "vue";
 import {useTripStore} from "@/stores/trip.js";
 import axios from "axios";
 import router from "@/router/index.js";
+import TripComponent from "@/components/TripComponent.vue";
 
 // const locationStore = useLocationStore();
 const tripStore = useTripStore();
 const locationStore = useLocationStore();
+
+const trips = ref(null)
+
 const gMap = ref(null);
 
 onMounted(async () => {
   await locationStore.updateCurrentLocation();
+
+  axios.get('/driver/trips').then((res) => {
+    console.log(res.data)
+    trips.value = res.data
+  }).catch((err) => console.error(err))
 
   window.Echo.channel('drivers').listen('TripCreated', (e) => {
     // tripStore.id = e.trip.id
@@ -20,8 +29,10 @@ onMounted(async () => {
     // tripStore.origin = e.trip.origin
     // tripStore.destination = e.trip.destination
     // tripStore.destination_name = e.trip.destination_name
-    tripStore.$patch(e.trip)
+    // tripStore.$patch(e.trip)
+    trips.value.push(e.trip)
     console.log(e.trip)
+
 
     setTimeout(initMapDirections, 2000)
   })
@@ -53,8 +64,9 @@ const initMapDirections = () => {
   })
 }
 
-const handleConfirmDrive = () => {
-    axios.post(`trip/${tripStore.id}/accept`, {
+const handleConfirmDrive = (trip) => {
+    // TODO сделать комнонентом карту,передавать туда в пропс id поездки и при нажатии кнопашки отправлять єто айді
+    axios.post(`trip/${trip}/accept`, {
         driver_location: locationStore.current.geometry
     }).then((response) => {
         locationStore.$patch({
@@ -70,49 +82,22 @@ const handleConfirmDrive = () => {
     }).catch((error) => console.error(error))
 }
 
-const handleDeclineDrive = () => {
-    tripStore.resetState();
+function handleStart(tripId) {
+  handleConfirmDrive(tripId)
 }
-
 
 </script>
 
 <template>
   <div class="pt-16">
-    <div v-if="!tripStore.id">
+    <div v-if="!trips">
       <h1 class="text-3xl font-semibold mb-4">Waiting for ride request...</h1>
       <div class="mt-8 flex justify-center">
           <Loader></Loader>
       </div>
     </div>
-    <div v-else>
-      <h1 class="text-3xl font-semibold mb-4">Customer want to drive!</h1>
-      <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
-        <div class="bg-white px-4 py-5 sm:p-6">
-          <div>
-            <GMapMap :zoom="11" :center="tripStore.destination"
-                     style="width: 100%; height: 256px;"
-                     ref="gMap">
-              <GMapMarker :position="tripStore.destination"></GMapMarker>
-            </GMapMap>
-          </div>
-          <div class="mt-2 text-right px-3">
-            <p class="text-xl">Drive to <strong>{{ tripStore.destination.name }}</strong></p>
-          </div>
-        </div>
-        <div class="flex justify-between bg-gray-50 px-4 py-3 text-right sm:px-6">
-          <button
-              @click.prevent="handleDeclineDrive"
-              class="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none">
-            Decline
-          </button>
-          <button
-              @click.prevent="handleConfirmDrive"
-              class="inline-flex justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-600 focus:outline-none">
-            Let's go!
-          </button>
-        </div>
-      </div>
+    <div v-else v-for="trip in trips">
+        <TripComponent :trip="trip" @start="handleStart"></TripComponent>
     </div>
   </div>
 </template>

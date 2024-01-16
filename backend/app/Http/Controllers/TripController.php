@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\TestEvent;
+use App\Events\CancelTrip;
 use App\Events\TripAccepted;
 use App\Events\TripCreated;
 use App\Events\TripEnded;
@@ -15,6 +15,11 @@ class TripController extends Controller
 {
     public function store(Request $request) {
         // validate request
+        $trip = $request->user()->trips()->where('status','not_started')->first();
+        if ($trip) {
+            return response(['message' => 'You already have trip,cancel last before start new'],204);
+        }
+
         $data = $request->validate([
             'origin' => 'required',
             'destination' => 'required',
@@ -38,6 +43,16 @@ class TripController extends Controller
         return response(['message' => 'You cannot access this trip'],403);
     }
 
+    public function current(Request $request) {
+        $trip = $request->user()->trips()->whereIn('status',['not_started','in_progress'])->orWhere('driver_id',$request->user()->driver->id)->first();
+
+        if ($trip) {
+            return $trip->load('driver.user');
+        } else {
+            return response(['message' => 'no trip'],204);
+        }
+
+    }
     public function accept(Request $request,Trip $trip) {
         // driver accept the trip
 
@@ -93,6 +108,20 @@ class TripController extends Controller
         TripEnded::dispatch($trip,$request->user());
         return $trip;
     }
+
+    public function cancel(Request $request,Trip $trip) {
+        // they have arrived
+        if ($request->user()->cannot('access',$trip)) {
+            return response(['message' => 'You cannot cancel this trip'],403);
+        }
+
+        CancelTrip::dispatch($trip->id);
+
+        $trip->delete();
+
+        return response(['message' => 'trip deleted']);
+    }
+
     public function location(Request $request,Trip $trip) {
         if ($request->user()->cannot('access',$trip)) {
             return response(['message' => 'You cannot start this trip'],403);

@@ -33,5 +33,7 @@ export const useLocationStore = defineStore('location',() => {
         current.geometry.lat = userLocation.coords.latitude
         current.geometry.lng = userLocation.coords.longitude
     }
+
+
     return { destination, current , updateCurrentLocation }
 })

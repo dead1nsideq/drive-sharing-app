@@ -14,13 +14,15 @@ class AuthController extends Controller
         // validate (request) the phone number
 
         $request->validate([
-            //|unique:'.User::class
+            'name' => 'required|string',
             'phone' => 'required|numeric|min:10'
         ]);
 
         // find or create a user model
         $user = User::firstOrCreate([
             'phone' => $request->phone
+        ], [
+            'name' => $request->name
         ]);
 
         if (!$user) {
