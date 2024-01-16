@@ -20,6 +20,8 @@ export const useTripStore = defineStore('trip', () => {
         lng: null
     })
 
+    // mb add driver location
+
     const destination_name = ref('')
 
 

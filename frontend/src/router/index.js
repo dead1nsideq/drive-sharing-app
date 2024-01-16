@@ -91,12 +91,15 @@ router.beforeEach(async (to, from, next) => {
     } else if ((to.name === 'map') && locationStore.destination.name === '') {
         console.log('fffffffffffuck')
         next({name: 'location'})
-    } else if (tripStore.driver_id === authStore.user_id && to.name === 'driving') {
+    } else if (tripStore.driver.id === authStore.state.user_id && to.name === 'driving') {
         console.log('i drive againg')
         next();
-    } else if (tripStore.id !== null) {
-        console.log('kakarot')
-        if (tripStore.user_id === authStore.user_id) {
+    } else if (tripStore.user_id === authStore.state.user_id && to.name === 'trip') {
+        console.log('i drive againg')
+        next();
+    }  else if (tripStore.id !== null) {
+        console.log(tripStore.user_id === authStore.user_id)
+        if (tripStore.user_id === authStore.state.user_id) {
             console.log('i am a passanger')
             next({name: 'trip'})
         } else {

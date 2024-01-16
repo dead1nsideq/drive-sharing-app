@@ -118,15 +118,14 @@ class TripController extends Controller
     }
 
     public function location(Request $request,Trip $trip) {
+        // todo policy return responce
         if ($request->user()->cannot('access',$trip)) {
-            return response(['message' => 'You cannot start this trip'],403);
+            return response(['message' => 'You cannot have access to this trip'],403);
         }
 
-        $data = $request->only(['driver_location','passenger_location']);
-
-        if (empty($data)) {
-            return response(['you provided empty data'],405);
-        }
+        $data = $request->validate([
+            'driver_location' => 'required'
+        ]);
 
         $trip->update($data);
 
@@ -135,4 +134,23 @@ class TripController extends Controller
         TripLocationUpdated::dispatch($trip,$request->user());
         return $trip;
     }
+
+//    public function location(Request $request,Trip $trip) {
+//        if ($request->user()->cannot('access',$trip)) {
+//            return response(['message' => 'You cannot start this trip'],403);
+//        }
+//
+//        $data = $request->only(['driver_location','passenger_location']);
+//
+//        if (empty($data)) {
+//            return response(['you provided empty data'],405);
+//        }
+//
+//        $trip->update($data);
+//
+//        $trip->load('driver.user');
+//
+//        TripLocationUpdated::dispatch($trip,$request->user());
+//        return $trip;
+//    }
 }
