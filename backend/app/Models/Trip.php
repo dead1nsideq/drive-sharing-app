@@ -15,6 +15,7 @@ class Trip extends Model
         'destination',
         'destination_name',
         'driver_location',
+        'passenger_location',
         'user_id',
         'driver_id',
     ];
@@ -24,6 +25,8 @@ class Trip extends Model
         'origin' => 'array',
         'destination' => 'array',
         'driver_location' => 'array',
+        'passenger_location' => 'array',
+
     ];
 
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo {

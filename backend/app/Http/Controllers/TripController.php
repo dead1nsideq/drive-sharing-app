@@ -13,21 +13,19 @@ use Illuminate\Http\Request;
 
 class TripController extends Controller
 {
+
     public function store(Request $request) {
-        // validate request
-        $trip = $request->user()->trips()->where('status','not_started')->first();
+        $trip = $request->user()->trips()->where('status',['not_started','in_progress'])->first();
         if ($trip) {
             return response(['message' => 'You already have trip,cancel last before start new'],204);
         }
 
+        // validate request
         $data = $request->validate([
             'origin' => 'required',
             'destination' => 'required',
             'destination_name' => 'required',
         ]);
-
-//        $data['origin'] = json_decode($data['origin'],true);
-//        $data['destination'] = json_decode($data['destination'],true);
 
         $trip = $request->user()->trips()->create($data);
 
@@ -44,7 +42,7 @@ class TripController extends Controller
     }
 
     public function current(Request $request) {
-        $trip = $request->user()->trips()->whereIn('status',['not_started','in_progress'])->orWhere('driver_id',$request->user()->driver->id)->first();
+        $trip = $request->user()->trips()->whereIn('status',['not_started','in_progress'])->orWhere('driver_id',$request->user()?->driver?->id)->first();
 
         if ($trip) {
             return $trip->load('driver.user');
@@ -64,7 +62,6 @@ class TripController extends Controller
             'driver_location' => 'required'
         ]);
 
-//        $data['driver_location'] = json_decode($data['driver_location'],true);
         $data['driver_id'] = $request->user()->driver->id;
         $trip->update([
             'status' => 'in_progress'
@@ -78,8 +75,6 @@ class TripController extends Controller
         return $trip;
     }
     public function start(Request $request,Trip $trip) {
-        // driver arrived, passenger and driver starts the trip
-
         if ($request->user()->cannot('handle',$trip)) {
             return response(['message' => 'You cannot start this trip'],403);
         }
@@ -127,11 +122,11 @@ class TripController extends Controller
             return response(['message' => 'You cannot start this trip'],403);
         }
 
-        $data = $request->validate([
-            'driver_location' => 'required'
-        ]);
+        $data = $request->only(['driver_location','passenger_location']);
 
-//        $data['driver_location'] = json_decode($data['driver_location'],true);
+        if (empty($data)) {
+            return response(['you provided empty data'],405);
+        }
 
         $trip->update($data);
 
