@@ -26,8 +26,6 @@ onBeforeMount(() => {
 })
 
 onMounted(() => {
-
-
   window.Echo.channel(`passenger_${authStore.state.user_id}`).listen('TripAccepted', (e) => {
       console.log('from broadcast', e)
       tripStore.$patch(e.trip)

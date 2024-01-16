@@ -19,6 +19,7 @@ return new class extends Migration
             $table->json('destination')->nullable();
             $table->string('destination_name')->nullable();
             $table->json('driver_location')->nullable();
+            $table->json('passenger_location')->nullable();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('driver_id')->nullable()->references('id')->on('drivers');
             $table->timestamps();
