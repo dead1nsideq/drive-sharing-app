@@ -32,6 +32,7 @@ export const useTripStore = defineStore('trip', () => {
         model: null,
         licence_plate: null,
         user: {
+            id: null,
             name: null,
         }
     })
@@ -53,6 +54,7 @@ export const useTripStore = defineStore('trip', () => {
         driver.model = null
         driver.licence_plate = null
         driver.user.name = null
+        driver.user.id = null
 
         status.value = 'not_started'
     }
@@ -72,6 +74,7 @@ export const useTripStore = defineStore('trip', () => {
         driver.model = data.driver ? data.driver.model : null;
         driver.licence_plate = data.driver ? data.driver.licence_plate : null;
         driver.user.name = data.driver && data.driver.user ? data.driver.user.name : null;
+        driver.user.id = data.driver && data.driver.id ? data.driver.user.id : null;
 
         status.value = data.status || null;
     }

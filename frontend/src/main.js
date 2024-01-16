@@ -41,12 +41,11 @@ window.Echo = new Echo({
 })
 
 const app = createApp(App)
-// AIzaSyDQxV0TU2-f-976Ovp2-_C1Qxh2Z00lrd4
 app.use(createPinia())
 app.use(router)
 app.use(VueGoogleMaps, {
     load: {
-        key: 'AIzaSyDQxV0TU2-f-976Ovp2-_C1Qxh2Z00lrd4',
+        key: 'YOUR GOOGLE KEY',
         libraries: 'places'
     },
 })

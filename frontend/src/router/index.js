@@ -89,16 +89,16 @@ router.beforeEach(async (to, from, next) => {
         console.log('i am here')
         next({name: 'location'})
     } else if ((to.name === 'map') && locationStore.destination.name === '') {
-        console.log('fffffffffffuck')
+        console.log('to name map && location.destination === empty')
         next({name: 'location'})
-    } else if (tripStore.driver.id === authStore.state.user_id && to.name === 'driving') {
-        console.log('i drive againg')
+    } else if (tripStore.driver.user.id === authStore.state.user_id && to.name === 'driving') {
+        console.log('tripStore.driver.user.id === authStore.state.user_id && to.name === \'driving\'')
         next();
     } else if (tripStore.user_id === authStore.state.user_id && to.name === 'trip') {
-        console.log('i drive againg')
+        console.log('tripStore.user_id === authStore.state.user_id && to.name === \'trip\'')
         next();
     }  else if (tripStore.id !== null) {
-        console.log(tripStore.user_id === authStore.user_id)
+        console.log(tripStore.driver.id === authStore.user_id)
         if (tripStore.user_id === authStore.state.user_id) {
             console.log('i am a passanger')
             next({name: 'trip'})

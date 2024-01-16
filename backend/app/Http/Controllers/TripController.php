@@ -10,6 +10,7 @@ use App\Events\TripLocationUpdated;
 use App\Events\TripStarted;
 use App\Models\Trip;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isNull;
 
 class TripController extends Controller
 {
@@ -42,8 +43,12 @@ class TripController extends Controller
     }
 
     public function current(Request $request) {
-        $trip = $request->user()->trips()->whereIn('status',['not_started','in_progress'])->orWhere('driver_id',$request->user()?->driver?->id)->first();
-
+        if (is_null($request->user()->driver)) {
+            $trip = $request->user()->trips()->whereIn('status', ['not_started', 'in_progress'])->first();
+        } else {
+            $trip = $request->user()->trips()->whereIn('status', ['not_started', 'in_progress'])
+                ->orWhere('driver_id', $request->user()->driver->id)->first();
+        }
         if ($trip) {
             return $trip->load('driver.user');
         } else {
@@ -135,22 +140,4 @@ class TripController extends Controller
         return $trip;
     }
 
-//    public function location(Request $request,Trip $trip) {
-//        if ($request->user()->cannot('access',$trip)) {
-//            return response(['message' => 'You cannot start this trip'],403);
-//        }
-//
-//        $data = $request->only(['driver_location','passenger_location']);
-//
-//        if (empty($data)) {
-//            return response(['you provided empty data'],405);
-//        }
-//
-//        $trip->update($data);
-//
-//        $trip->load('driver.user');
-//
-//        TripLocationUpdated::dispatch($trip,$request->user());
-//        return $trip;
-//    }
 }
