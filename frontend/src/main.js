@@ -11,6 +11,7 @@ import axios from "axios";
 import Echo from "laravel-echo";
 
 import Pusher from 'pusher-js';
+import process from "@fawmi/vue-google-maps/.eslintrc.js";
 
 window.axios = axios
 window.axios.defaults.baseURL= "http://localhost:8000/api";
@@ -45,7 +46,7 @@ app.use(createPinia())
 app.use(router)
 app.use(VueGoogleMaps, {
     load: {
-        key: 'YOUR GOOGLE KEY',
+        key: import.meta.env.VITE_GOOGLE_MAP_KEY,
         libraries: 'places'
     },
 })
