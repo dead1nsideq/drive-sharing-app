@@ -2,13 +2,15 @@
 
 import {useTripStore} from "@/stores/trip.js";
 import {useLocationStore} from "@/stores/location.js";
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import axios from "axios";
+import router from "@/router/index.js";
 
 const tripStore = useTripStore();
 const locationStore = useLocationStore();
 
 const intervalRef = ref(null);
+const distance = ref(null);
 
 const currentIcon = {
   url: 'https://openmoji.org/data/color/svg/1F698.svg',
@@ -28,13 +30,24 @@ const destinationIcon = {
 
 const updateMapBounds = (mapObject) => {
   let originPoint = new google.maps.LatLng(locationStore.current.geometry),
-      destinationPoint = new google.maps.LatLng(tripStore.destination),
+      destinationPoint = new google.maps.LatLng(tripStore.origin),
       latLngBounds = new google.maps.LatLngBounds()
 
   latLngBounds.extend(originPoint)
   latLngBounds.extend(destinationPoint)
 
   mapObject.fitBounds(latLngBounds)
+}
+
+function handleCancelTrip() {
+  axios.delete(`/trip/${tripStore.id}/cancel`).then((res) => {
+        console.log(res.data)
+        tripStore.resetState()
+        router.push({
+          name: 'home'
+        })
+      }
+  ).catch((err) => console.error(err))
 }
 
 const broadcastDriverLocation = () => {
@@ -46,6 +59,20 @@ const broadcastDriverLocation = () => {
         console.error(error)
       })
 }
+
+const calculateDistance = () => {
+  // Создание объектов координат
+  const origin = new google.maps.LatLng(locationStore.current.geometry); // Нью-Йорк
+  const destination = new google.maps.LatLng(tripStore.origin); // Лос-Анджелес
+
+// Расчет расстояния между точками
+  const distance = google.maps.geometry.spherical.computeDistanceBetween(origin, destination);
+  return distance;
+}
+
+const driverArrived = computed(() => {
+    return distance.value !== null && distance.value < 10;
+})
 
 onMounted(() => {
   gMap.value.$mapPromise.then((mapObject) => {
@@ -59,7 +86,12 @@ onMounted(() => {
       broadcastDriverLocation()
 
       updateMapBounds(mapObject)
-    }, 5000)
+
+      console.log(distance.value)
+      distance.value = calculateDistance();
+      console.log(distance.value)
+      // set to 10 sec
+    }, 1000000)
   })
 })
 
@@ -82,15 +114,16 @@ const gMap = ref(null)
             <GMapMap :zoom="14" :center="{ lat: +locationStore.current.geometry.lat, lng: +locationStore.current.geometry.lng}" ref="gMap"
                      style="width:100%; height: 256px;">
               <GMapMarker :position="{ lat: +locationStore.current.geometry.lat, lng: +locationStore.current.geometry.lng}" :icon="currentIcon" />
-              <GMapMarker :position="{ lat: +tripStore.destination.lat, lng: +tripStore.destination.lng}" :icon="destinationIcon" />
+              <GMapMarker :position="{ lat: +tripStore.origin.lat, lng: +tripStore.origin.lng}" :icon="destinationIcon" />
             </GMapMap>
           </div>
         <div class="mt-2">
             <p class="text-xl">Going to <strong>pick up a passenger</strong></p>
         </div>
         </div>
-        <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-
+        <div class="flex justify-between bg-gray-50 px-4 py-3 sm:px-6">
+            <button class="text-left" @click.prevent="handleCancelTrip">Cancel</button>
+            <button v-if="driverArrived" class="text-right" @click.prevent="handleCancelTrip">Passenger got in</button>
         </div>
       </div>
     </div>

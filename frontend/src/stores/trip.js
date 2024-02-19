@@ -1,7 +1,7 @@
 // TODO сохранять поездку что бы не терялась в процессе,
 //  возможно делать это в locationStore,смотреть
 //  если ли сейчас активная поезда у пользователя или у водителя
-
+// mb add driver location and user location
 
 import {defineStore} from "pinia";
 import {reactive, ref} from "vue";
@@ -79,12 +79,12 @@ export const useTripStore = defineStore('trip', () => {
         status.value = data.status || null;
     }
 
-
     async function initTripCheck() {
         if (!id.value) {
             await axios.get(`/trip`)
                 .then((res) => {
                     const data = res.data;
+                    console.log(data)
                     setState(res.data);
                 })
                 .catch((err) => console.error(err));

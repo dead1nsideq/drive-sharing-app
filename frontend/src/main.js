@@ -47,7 +47,7 @@ app.use(router)
 app.use(VueGoogleMaps, {
     load: {
         key: import.meta.env.VITE_GOOGLE_MAP_KEY,
-        libraries: 'places'
+        libraries: ['places','geometry']
     },
 })
 app.mount('#app')

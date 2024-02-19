@@ -80,7 +80,6 @@ router.beforeEach(async (to, from, next) => {
     await tripStore.initTripCheck();
     await locationStore.updateCurrentLocation()
 
-
     if (to.meta.requiresGuest && authStore.state.user_id) {
         next({name: 'home'});
     } else if (to.meta.requiresAuth && !authStore.state.user_id) {

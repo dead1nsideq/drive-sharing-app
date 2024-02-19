@@ -11,7 +11,7 @@ import TripComponent from "@/components/TripComponent.vue";
 const tripStore = useTripStore();
 const locationStore = useLocationStore();
 
-const trips = ref(null)
+const trips = ref([]);
 
 const gMap = ref(null);
 
@@ -20,7 +20,9 @@ onMounted(async () => {
 
   axios.get('/driver/trips').then((res) => {
     console.log(res.data)
-    trips.value = res.data
+    if (res.data.length) {
+      trips.value = res.data
+    }
   }).catch((err) => console.error(err))
 
   window.Echo.channel('drivers').listen('TripCreated', (e) => {
@@ -30,15 +32,19 @@ onMounted(async () => {
     // tripStore.destination = e.trip.destination
     // tripStore.destination_name = e.trip.destination_name
     // tripStore.$patch(e.trip)
-    trips.value.push(e.trip)
     console.log(e.trip)
+    trips.value.push(e.trip)
 
-
-    setTimeout(initMapDirections, 2000)
+    // console.log('here')
+     setTimeout(initMapDirections, 2000)
+    // initMapDirections();
+    // console.log('there')
   })
 })
 
+// засунуть в трип компонент пускай там ебатня эта залупиться
 const initMapDirections = () => {
+  console.log("INIT MAP DIR")
   gMap.value.$mapPromise.then((mapObject) => {
 
     let originPoint = new google.maps.LatLng(tripStore.origin),
@@ -90,14 +96,14 @@ function handleStart(tripId) {
 
 <template>
   <div class="pt-16">
-    <div v-if="!trips">
+    <div v-if="!trips.length">
       <h1 class="text-3xl font-semibold mb-4">Waiting for ride request...</h1>
       <div class="mt-8 flex justify-center">
           <Loader></Loader>
       </div>
     </div>
     <div v-else v-for="trip in trips">
-        <TripComponent :trip="trip" @start="handleStart"></TripComponent>
+        <TripComponent :trip="trip" @start="handleStart"></TripComponent >
     </div>
   </div>
 </template>
