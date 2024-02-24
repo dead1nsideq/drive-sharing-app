@@ -10,7 +10,6 @@ use App\Events\TripLocationUpdated;
 use App\Events\TripStarted;
 use App\Models\Trip;
 use Illuminate\Http\Request;
-use function PHPUnit\Framework\isNull;
 
 class TripController extends Controller
 {
@@ -56,6 +55,8 @@ class TripController extends Controller
         }
 
     }
+
+    // accept trip can be done by driver only
     public function accept(Request $request,Trip $trip) {
         // driver accept the trip
 
@@ -79,6 +80,7 @@ class TripController extends Controller
 
         return $trip;
     }
+    // to start a trip both driver and user should be in the same location (origin === driver_location)
     public function start(Request $request,Trip $trip) {
         if ($request->user()->cannot('handle',$trip)) {
             return response(['message' => 'You cannot start this trip'],403);
@@ -93,6 +95,7 @@ class TripController extends Controller
         TripStarted::dispatch($trip,$request->user());
         return $trip;
     }
+    // to end a trip both driver and user should be in the same location (destination === driver_location)
     public function end(Request $request,Trip $trip) {
         // they have arrived
         if ($request->user()->cannot('handle',$trip)) {
@@ -109,6 +112,7 @@ class TripController extends Controller
         return $trip;
     }
 
+    // cancel trip can be done by both user and driver but only if the trip is not started
     public function cancel(Request $request,Trip $trip) {
         // they have arrived
         if ($request->user()->cannot('access',$trip)) {
@@ -122,6 +126,7 @@ class TripController extends Controller
         return response(['message' => 'trip deleted']);
     }
 
+    // обновление местоположения водителя или пассажира
     public function location(Request $request,Trip $trip) {
         // todo policy return responce
         if ($request->user()->cannot('access',$trip)) {

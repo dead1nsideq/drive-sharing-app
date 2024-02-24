@@ -12,6 +12,9 @@ const authStore = useAuthStore();
 const title = ref('Waiting for driver...')
 const message = ref('When a driver accepts the trip, their info will appear here')
 
+// добавить иконку пассажира (ковбой) центрировать карту как у страницы driving
+// возможно driving.vue,standby.vue,map.vue,location.vue и trip.vue можно объединить, не нужно две-три страницы
+
 const currentIcon = {
   url: 'https://openmoji.org/data/color/svg/1F698.svg',
   scaledSize: {
@@ -55,6 +58,7 @@ function handleCancelTrip() {
           <div class="bg-white px-4 py-5 sm:p-6">
              <div>
                <GMapMap :center="{lat: +tripStore.destination.lat, lng: +tripStore.destination.lng}" :zoom="14"
+                        :options="{mapTypeControl: false, streetViewControl: false, fullscreenControl: false}"
                         ref="gMap" style="width: 100%; height: 256px;">
                  <GMapMarker :position="locationStore.current.geometry" :icon="currentIcon" />
                </GMapMap>

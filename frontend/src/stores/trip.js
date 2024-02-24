@@ -20,10 +20,12 @@ export const useTripStore = defineStore('trip', () => {
         lng: null
     })
 
-    // mb add driver location
-
     const destination_name = ref('')
 
+    const driver_location = reactive({
+        lat: null,
+        lng: null
+    })
 
     const driver = reactive({
         id: null,
@@ -67,6 +69,8 @@ export const useTripStore = defineStore('trip', () => {
         destination.lat = data.destination ? +data.destination.lat : null;
         destination.lng = data.destination ? +data.destination.lng : null;
         destination_name.value = data.destination_name || null;
+        driver_location.lat = data.driver_location ? +data.driver_location.lat : null;
+        driver_location.lng = data.driver_location ? +data.driver_location.lng : null;
 
         driver.id = data.driver ? data.driver.id : null;
         driver.year = data.driver ? data.driver.year : null;
@@ -94,5 +98,5 @@ export const useTripStore = defineStore('trip', () => {
 
 
 
-    return { id, user_id, origin, destination, destination_name,driver,status, resetState ,initTripCheck }
+    return { id, user_id, origin, destination, destination_name ,driver_location ,driver,status, resetState ,initTripCheck }
 })

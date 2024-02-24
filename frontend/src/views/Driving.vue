@@ -90,7 +90,7 @@ onMounted(() => {
       console.log(distance.value)
       distance.value = calculateDistance();
       console.log(distance.value)
-      // set to 10 sec
+      // set to 10 sec or update when position changes for 100 or smth like that meters
     }, 1000000)
   })
 })

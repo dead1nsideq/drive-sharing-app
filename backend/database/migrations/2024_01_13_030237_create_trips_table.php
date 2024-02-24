@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-
+            // maybe need add more status like in_progress but passenger not in car yet
             $table->enum('status',['completed','in_progress','not_started'])->default('not_started');
             $table->json('origin')->nullable();
             $table->json('destination')->nullable();

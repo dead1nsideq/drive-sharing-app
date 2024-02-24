@@ -29,6 +29,9 @@ const handleSelectLocation = () => {
     showErrorMessage.value = true
   }
 }
+
+// можно поставить const destination = ref('') и если destination.value !== '' то нарисовать путь до это локации на карте
+
 </script>
 
 <template>

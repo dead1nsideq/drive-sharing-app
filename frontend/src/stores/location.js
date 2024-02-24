@@ -8,14 +8,6 @@ export const getUserLocation = async () => {
     })
 }
 export const useLocationStore = defineStore('location',() => {
-    const destination = reactive({
-        name: '',
-        address: '',
-        geometry: {
-            lat: null,
-            lng: null
-        }
-    })
 
     const current =reactive({
         geometry: {
@@ -35,5 +27,15 @@ export const useLocationStore = defineStore('location',() => {
     }
 
 
-    return { destination, current , updateCurrentLocation }
+    return { current , updateCurrentLocation }
 })
+
+
+/*
+ Может быть тоже трекать юзер локейшон и менять его если он прошел каждые 5 метров (currentLoc - originLoc) > 5 до того
+ пока он не сядет в машину (после этого окончательно перестать трекать его локейшон)
+
+ убрать locationStore, объединить его с tripStore продумать отдельную логику для водителя и юзера
+
+ то есть водитель сначала еде к юзеру, потом вместе едут куда-то, поездка окон
+ */
